@@ -1,4 +1,4 @@
-# 完整代码实现
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -40,21 +40,21 @@ class DownBlock(nn.Module):
         out = self.maxpool(x)
         return self.nConvs(out)
 
-# 定义一个增强的通道注意力机制
+
 class EnhancedCCA(nn.Module):
     def __init__(self, F_g, F_x):
         super(EnhancedCCA, self).__init__()
-        # 使用两倍的特征统计，因此MLP的输入维度变为2倍
+        
         self.mlp_x = nn.Sequential( 
             Flatten(),
-            nn.Linear(F_x * 2, F_x),  # 注意这里的维度变化
+            nn.Linear(F_x * 2, F_x),  
             nn.ReLU(),
             nn.Linear(F_x, F_x)
         )
 
         self.mlp_g = nn.Sequential(
             Flatten(),
-            nn.Linear(F_g * 2, F_x),  # 注意这里的维度变化
+            nn.Linear(F_g * 2, F_x), 
             nn.ReLU(),
             nn.Linear(F_x, F_x)
         )
@@ -66,7 +66,7 @@ class EnhancedCCA(nn.Module):
         avg_pool_g = F.avg_pool2d(g, (g.size(2), g.size(3)), stride=(g.size(2), g.size(3)))
         max_pool_g = F.max_pool2d(g, (g.size(2), g.size(3)), stride=(g.size(2), g.size(3)))
 
-        # 合并两种池化统计
+        
         combined_pool_x = torch.cat([avg_pool_x, max_pool_x], dim=1)
         combined_pool_g = torch.cat([avg_pool_g, max_pool_g], dim=1)
 
